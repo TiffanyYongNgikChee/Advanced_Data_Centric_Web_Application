@@ -1,16 +1,18 @@
 package com.example.demo.models;
 
-import com.fasterxml.jackson.annotation.JsonView;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
-
+ import com.example.demo.views.VehicleViews;
+ import com.fasterxml.jackson.annotation.JsonManagedReference;
+ import com.fasterxml.jackson.annotation.JsonView;
+ 
+ import jakarta.persistence.Column;
+ import jakarta.persistence.Entity;
+ import jakarta.persistence.GeneratedValue;
+ import jakarta.persistence.GenerationType;
+ import jakarta.persistence.Id;
+ import jakarta.persistence.ManyToOne;
+ import jakarta.validation.constraints.NotNull;
+ import jakarta.validation.constraints.Null;
 
 @Entity
 public class Vehicle {
@@ -18,14 +20,25 @@ public class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@JsonView(VehicleViews.Public.class)
 	@Column(unique = true)
 	private String reg;
+	
+	@JsonView(VehicleViews.Public.class)
 	private String make;
+	
+	@JsonView(VehicleViews.Public.class)
 	private String model;
+	
+	@JsonView(VehicleViews.Public.class)
 	@ManyToOne
+	@JsonManagedReference("vehicle-owner")
 	private Customer owner;
 	 
-	@ManyToOne
+	@JsonView(VehicleViews.Public.class)
+ 	@ManyToOne
+ 	@JsonManagedReference("vehicle-mechanic")
 	private Mechanic mechanic;
 	
 	
