@@ -56,6 +56,12 @@ public class VehicleControllers {
      public List<Vehicle> getVehiclesByMake(@RequestParam String make) {
          return vs.getVehiclesByMake(make);
      }
+	 
+	 @GetMapping("/one") // GET "/api/vehicle?reg=<carReg>"
+     @JsonView(VehicleViews.ExtendedPublic.class)
+     public Optional<Vehicle> getVehicleByReg(@RequestParam String reg) {
+     	return vs.getVehicleByReg(reg); // Call service to return JSON vehicle object.
+     }
      
 	 @CrossOrigin(origins = "http://localhost:4200")
      @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}) // POST "/api/vehicle"

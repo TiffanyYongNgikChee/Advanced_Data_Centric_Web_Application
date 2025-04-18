@@ -38,4 +38,15 @@ export class GarageService {
 
     return this.httpClient.get<any>(url);
   }
+
+   // Get vehicle by reg.
+   getVehicleByReg(reg: string): Observable<Vehicle> {
+    // URL with the reg parameter.
+    const url = `${GARAGE_API_BASE}/vehicle/one?reg=${reg}`;
+    
+    // debug
+    console.log('Making API request to:', url);
+
+    return this.httpClient.get<Vehicle>(url);
+  }
 }

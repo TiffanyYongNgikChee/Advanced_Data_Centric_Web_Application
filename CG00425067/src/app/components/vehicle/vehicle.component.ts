@@ -25,4 +25,8 @@ export class VehicleComponent {
        console.log('Vehicle Details:', this.vehicles);
      });
    }
+
+   updateVehicle(reg: String) {
+      window.location.href = `/vehicleDetails/${reg}`;
+   }
 }

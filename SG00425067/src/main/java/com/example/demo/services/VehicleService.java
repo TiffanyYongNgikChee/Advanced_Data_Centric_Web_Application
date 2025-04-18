@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +36,11 @@ public class VehicleService {
     @JsonView(VehicleViews.Public.class)
     public List<Vehicle> getVehiclesByMake(String make) {
         return vr.findByMake(make);
+    }
+    
+    @JsonView(VehicleViews.ExtendedPublic.class) // Returns JsonView objects.
+    public Optional<Vehicle> getVehicleByReg(String reg) {
+        return vr.findByReg(reg);
     }
     
     public void save(Vehicle v) throws VehicleException { // Save vehicle to database.
