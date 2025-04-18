@@ -1,31 +1,38 @@
 <div class="vehicles-container">
-    <h2>Vehicle Inventory</h2>
-    
-    <div class="table-responsive">
-      <table class="vehicles-table">
-        <thead>
-          <tr>
-            <th>Registration</th>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Owner</th>
-            <th>Mechanic</th>
-            <th>Garage Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngIf="vehicles.length === 0">
-            <td colspan="6" class="no-data">No vehicles found</td>
-          </tr>
-          <tr *ngFor="let vehicle of vehicles">
-            <td>{{ vehicle.reg }}</td>
-            <td>{{ vehicle.make }}</td>
-            <td>{{ vehicle.model }}</td>
-            <td>{{ vehicle.owner.name }} (ID: {{ vehicle.owner.cid }})</td>
-            <td>{{ vehicle.mechanic.name }}</td>
-            <td>{{ vehicle.mechanic.garage.location }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+  <div class="table-responsive">
+    <table class="vehicles-table">
+      <thead>
+        <tr>
+          <th>Reg</th>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Owner</th>
+          <th>Mechanic</th>
+          <th>Garage Location</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="vehicles.length === 0">
+          <td colspan="7" class="no-data">No vehicles found</td>
+        </tr>
+        <tr *ngFor="let vehicle of vehicles">
+          <td>{{ vehicle.reg }}</td>
+          <td>{{ vehicle.make }}</td>
+          <td>{{ vehicle.model }}</td>
+          <td>{{ vehicle.owner.cid }}, {{ vehicle.owner.name }}</td>
+          <td>
+            {{ vehicle.mechanic.mid }}, {{ vehicle.mechanic.name }}, {{ vehicle.mechanic.salary }}
+          </td>
+          <td>
+            {{ vehicle.mechanic.garage.gid }}, {{ vehicle.mechanic.garage.location }}, {{ vehicle.mechanic.garage.budget}}
+          </td>
+          <td>
+            <button class="update-btn">Update</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div>
