@@ -1,8 +1,10 @@
 package com.example.demo.models;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
+import com.example.demo.views.VehicleViews;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -20,10 +22,16 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@JsonView(VehicleViews.Public.class)
 	@Column(unique = true)
 	private String cid;
+	
+	@JsonView(VehicleViews.Public.class)
 	private String name;
+	
 	private String phone;
+	
 	@OneToMany(mappedBy = "owner")
 	private List<Vehicle> vehicles = new ArrayList<>();
 	

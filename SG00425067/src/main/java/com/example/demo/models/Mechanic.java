@@ -3,6 +3,8 @@ package com.example.demo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.views.VehicleViews;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -21,13 +23,23 @@ public class Mechanic {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@JsonView(VehicleViews.Public.class)
 	@Column(unique = true)
 	private String mid;
+	
+	@JsonView(VehicleViews.Public.class)
 	private String name;
+	
+	@JsonView(VehicleViews.Public.class)
 	private Double salary;
+	
+	@JsonView(VehicleViews.Public.class)
 	@ManyToOne
 	private Garage garage;
+	
 	@OneToMany(mappedBy = "mechanic")
+	@JsonBackReference("vehicle-mechanic")
 	private List<Vehicle> vehicles;// = new ArrayList<Vehicle>();
 	
 	public Mechanic() {

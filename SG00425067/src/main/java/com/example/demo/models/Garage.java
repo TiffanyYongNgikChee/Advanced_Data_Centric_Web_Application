@@ -3,6 +3,7 @@ package com.example.demo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.views.VehicleViews;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -18,10 +19,17 @@ public class Garage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	@JsonView(VehicleViews.Public.class)
 	@Column(unique = true)
 	private String gid;
+	
+	@JsonView(VehicleViews.Public.class)
 	private String location;
+	
+	@JsonView(VehicleViews.Public.class)
 	private int budget;
+	
 	@OneToMany(mappedBy = "garage")
 	private List<Mechanic> mechanics = new ArrayList<Mechanic>();
 		
