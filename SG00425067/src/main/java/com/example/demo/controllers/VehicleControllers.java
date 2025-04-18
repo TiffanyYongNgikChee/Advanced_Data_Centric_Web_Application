@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,19 +42,22 @@ import jakarta.validation.Valid;
 public class VehicleControllers {
 	 @Autowired
      VehicleService vs;
-     
+	 
+	 @CrossOrigin(origins = "http://localhost:4200")
      @GetMapping("/all")
      @JsonView(VehicleViews.Public.class)
      public Iterable<Vehicle> getAllVehicles() {
          return vs.getAllVehicles();
      }
      
+	 @CrossOrigin(origins = "http://localhost:4200")
      @GetMapping // GET "/api/vehicle?make=<carMake>"
      @JsonView(VehicleViews.Public.class)
      public List<Vehicle> getVehiclesByMake(@RequestParam String make) {
          return vs.getVehiclesByMake(make);
      }
      
+	 @CrossOrigin(origins = "http://localhost:4200")
      @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}) // POST "/api/vehicle"
      public ResponseEntity<?> addVehicle(@Valid @RequestBody VehicleData dto, BindingResult result) throws VehicleException { // Get vehicle from request body.
      	// Validation happens automatically here.
@@ -73,6 +77,7 @@ public class VehicleControllers {
          return ResponseEntity.ok(vehicle);
      }
      
+	 @CrossOrigin(origins = "http://localhost:4200")
      @PutMapping("/{reg}")
      @JsonView(VehicleViews.Public.class)
      public ResponseEntity<?> updateVehicleMechanic(
