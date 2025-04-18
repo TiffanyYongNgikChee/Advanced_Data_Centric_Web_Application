@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.example.demo.models.Vehicle;
+import com.example.demo.data.VehicleData;
 import com.example.demo.exceptions.VehicleException;
 import com.example.demo.repositories.VehicleRepository;
 import com.example.demo.views.VehicleViews;
@@ -27,11 +28,24 @@ public class VehicleService {
         return vr.findByMake(make);
     }
     
-    public void save(Vehicle v) throws VehicleException {
-    	 try {
-    	 vr.save(v);
-    	 } catch (DataIntegrityViolationException ex) {
-    	 throw new VehicleException("Vehicle " + v.getId() + " already exists");
-    	 }
+    
+    // Creates a Vehicle from DTO for POST implementation.
+    public Vehicle createVehicleFromDTO(VehicleData dto) throws VehicleException {
+        if (dto.getReg() == null || dto.getMake() == null || dto.getModel() == null) {
+            throw new VehicleException("reg, make, and model are required fields");
+        }
+
+        if (vr.existsByReg(dto.getReg())) {
+            throw new VehicleException("Vehicle with reg " + dto.getReg() + " already exists");
+        }
+    	
+        Vehicle vehicle = new Vehicle();
+        vehicle.setMake(dto.getMake());
+        vehicle.setModel(dto.getModel());
+        vehicle.setReg(dto.getReg());
+
+        return vr.save(vehicle);
     }
+
+
 }

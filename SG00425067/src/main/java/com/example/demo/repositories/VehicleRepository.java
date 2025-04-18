@@ -14,4 +14,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
     
     @EntityGraph(attributePaths = {"owner", "mechanic", "mechanic.garage"})
     List<Vehicle> findByMake(String make);
+    
+    boolean existsByReg(String reg);
+
 }

@@ -1,6 +1,10 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -14,9 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.demo.exceptions.VehicleException;
 import com.example.demo.models.Vehicle;
+import com.example.demo.data.VehicleData;
+
 import com.example.demo.services.VehicleService;
 import com.example.demo.views.VehicleViews;
 import com.example.demo.validations.VehiclePValidation;
@@ -35,13 +44,28 @@ public class VehicleControllers {
          return vs.getAllVehicles();
      }
      
-     @GetMapping
+     @GetMapping // GET "/api/vehicle?make=<carMake>"
      @JsonView(VehicleViews.Public.class)
      public List<Vehicle> getVehiclesByMake(@RequestParam String make) {
          return vs.getVehiclesByMake(make);
      }
      
-     
-
-    
+     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}) // POST "/api/vehicle"
+     public ResponseEntity<?> addVehicle(@Valid @RequestBody VehicleData dto, BindingResult result) throws VehicleException { // Get vehicle from request body.
+     	// Validation happens automatically here.
+     	
+     	if (result.hasErrors()) {
+     		// Return first error message caught during validation.
+     		String errorMessage = result.getFieldErrors().stream()
+     	            .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+     	            .collect(Collectors.joining(", "));
+     	        return ResponseEntity.badRequest().body(errorMessage);
+     	}
+         
+     	// Create vehicle
+         Vehicle vehicle = vs.createVehicleFromDTO(dto);
+             
+         // Return 400 OK -> vehicle saved to database.
+         return ResponseEntity.ok(vehicle);
+     }
 }
