@@ -26,10 +26,10 @@
             {{ vehicle.mechanic?.mid }}, {{ vehicle.mechanic?.name }}, {{ vehicle.mechanic?.salary }}
           </td>
           <td>
-            {{ vehicle.mechanic.garage.gid }}, {{ vehicle.mechanic.garage.location }}, {{ vehicle.mechanic.garage.budget}}
+            {{ vehicle.mechanic.garage.gid }}, {{ vehicle.mechanic.garage.location }}, {{ vehicle.mechanic.garage?.budget}}
           </td>
           <td>
-            <button class="update-btn">Update</button>
+            <button (click)="updateVehicle(vehicle.reg)" class="btn btn-primary">Update</button>
           </td>
         </tr>
       </tbody>
