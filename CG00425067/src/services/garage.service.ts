@@ -49,4 +49,15 @@ export class GarageService {
 
     return this.httpClient.get<Vehicle>(url);
   }
+
+  // Update vehicle mechanic
+  updateVehicleMechanic(reg: string, mid: string): Observable<any> {
+    const url = `${GARAGE_API_BASE}/vehicle/${reg}`;
+    const body = { mid };
+    
+    // debug
+    // console.log('Making API PUT request to:', url, 'with body:', body);
+
+    return this.httpClient.put<any>(url, body);
+  }
 }
