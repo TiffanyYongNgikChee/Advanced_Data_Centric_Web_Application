@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.demo.views.VehicleViews;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -33,6 +34,7 @@ public class Customer {
 	private String phone;
 	
 	@OneToMany(mappedBy = "owner")
+	@JsonBackReference("vehicle-owner")
 	private List<Vehicle> vehicles = new ArrayList<>();
 	
 	public Customer() {

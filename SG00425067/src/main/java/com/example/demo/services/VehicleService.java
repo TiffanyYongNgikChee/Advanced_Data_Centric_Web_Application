@@ -55,11 +55,27 @@ public class VehicleService {
     // Creates a Vehicle from DTO for POST implementation.
     public Vehicle createVehicleFromDTO(VehicleData dto) throws VehicleException {
         if (dto.getReg() == null || dto.getMake() == null || dto.getModel() == null) {
-            throw new VehicleException("reg, make, and model are required fields");
+            throw new IllegalArgumentException("save.vehicle.reg: reg must be provided");
         }
+        if (dto.getMake() == null) {
+            throw new IllegalArgumentException("save.vehicle.make: make must be provided");
+        }
+        if (dto.getModel() == null) {
+            throw new IllegalArgumentException("save.vehicle.model: model must be provided");
+        }
+        
+        if (dto.getId() != null ) {
+            throw new IllegalArgumentException("save.vehicle.id: id must not be provided");
+        }
+        //if (dto.getOwner() != null ) {
+        //    throw new DisallowedFieldException("save.vehicle.owner: owner must not be provided");
+        //}
+        //if (dto.getMechanic() != null ) {
+        //    throw new DisallowedFieldException("save.vehicle.mechanic: mechanic must not be provided");
+        //}
 
         if (vr.existsByReg(dto.getReg())) {
-            throw new VehicleException("Vehicle with reg " + dto.getReg() + " already exists");
+            throw new IllegalArgumentException("Vehicle " + dto.getReg() + " already exists");
         }
     	
         Vehicle vehicle = new Vehicle();

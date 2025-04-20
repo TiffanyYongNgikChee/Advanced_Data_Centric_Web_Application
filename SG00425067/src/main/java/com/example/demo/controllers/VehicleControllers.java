@@ -60,7 +60,7 @@ public class VehicleControllers {
 	 public Optional<Vehicle> getVehicleByReg(@RequestParam String reg) {
 	    return vs.getVehicleByReg(reg); // Call service to return JSON vehicle object.
 	  }
-     
+
      @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}) // POST "/api/vehicle"
      public ResponseEntity<?> addVehicle(@Valid @RequestBody VehicleData dto, BindingResult result) throws VehicleException { // Get vehicle from request body.
      	// Validation happens automatically here.

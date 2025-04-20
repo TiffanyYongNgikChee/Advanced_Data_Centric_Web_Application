@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.demo.views.VehicleViews;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
@@ -35,6 +36,7 @@ public class Mechanic {
 	private Double salary;
 	
 	@JsonView(VehicleViews.Public.class)
+	@JsonManagedReference("vehicle-mechanic")
 	@ManyToOne
 	private Garage garage;
 	
