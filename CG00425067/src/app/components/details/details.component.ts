@@ -17,7 +17,7 @@ export class DetailsComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-
+  public reg: string = '';
   public isLoading: boolean = false;
   
   // Store error state and message.
@@ -37,6 +37,7 @@ export class DetailsComponent implements OnInit{
      this.route.paramMap.subscribe(params => {
       const reg = params.get('reg');
       if (reg) {
+        this.reg = reg;
         // Use the registration to fetch vehicle details
         this.garageService.getVehicleByReg(reg).subscribe(
           (data: Vehicle) => {
