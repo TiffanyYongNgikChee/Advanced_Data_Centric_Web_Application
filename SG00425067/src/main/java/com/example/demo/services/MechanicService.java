@@ -28,12 +28,12 @@ public class MechanicService {
     public void deleteMechanic(String mid) {
         // Check if mechanic exists.
         Mechanic mechanic = mr.findByMid(mid)
-            .orElseThrow(() -> new MechanicNotFoundException("Mechanic with mid " + mid + " not found"));
+            .orElseThrow(() -> new MechanicNotFoundException("Mechanic " + mid + " doesn't exist"));
 
         // Check if mechanic is associated with any vehicles
         List<Vehicle> vehicles = vr.findByMechanicId(Integer.parseInt(mid.substring(1)));
         if (!vehicles.isEmpty()) {
-            throw new MechanicException("Mechanic is currently servicing " + vehicles.size() + " vehicles");
+            throw new MechanicException("Mechanic " + mid +" can't be deleted. He/She is servicing " + vehicles.size() + " vehicles");
         }
 
         // Delete mechanic.

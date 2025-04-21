@@ -88,10 +88,10 @@ public class VehicleService {
     @Transactional // PUT method is atomic. All or nothing.
     public Vehicle updateMechanic(String reg, String mid) { // For POST method: Update mechanic associated with car reg.
         Vehicle vehicle = vr.findByReg(reg)
-            .orElseThrow(() -> new VehicleNotFoundException("Vehicle not found")); // Error handling.
+            .orElseThrow(() -> new IllegalArgumentException("Vehicle " + reg + " doesn't exist")); // Error handling.
         
         Mechanic mechanic = mr.findByMid(mid)
-                .orElseThrow(() -> new MechanicNotFoundException("Mechanic not found")); // Error handling.
+                .orElseThrow(() -> new IllegalArgumentException("Mechanic " + mid + " doesn't exist")); // Error handling.
             
         vehicle.setMechanic(mechanic); // Update mechanic.
         return vr.save(vehicle); // Save mechanic.

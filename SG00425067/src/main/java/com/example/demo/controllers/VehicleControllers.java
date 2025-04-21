@@ -86,13 +86,14 @@ public class VehicleControllers {
          @PathVariable String reg,
          @RequestBody Map<String, Object> requestBody) {  // Use Map to inspect raw JSON.
          
+    	 
          // Check for disallowed attributes
          Set<String> disallowed = Set.of("id", "name", "salary", "garage", "vehicles");
          for (String key : requestBody.keySet()) {
              if (disallowed.contains(key)) {
                  throw new ResponseStatusException(
                      HttpStatus.INTERNAL_SERVER_ERROR,
-                     "Attribute not allowed: " + key
+                     "updateVehicle.mechanic." + key + ": " + key + " must not be provided, "
                  );
              }
          }
@@ -101,7 +102,7 @@ public class VehicleControllers {
          if (!requestBody.containsKey("mid")) {
              throw new ResponseStatusException(
                  HttpStatus.BAD_REQUEST,
-                 "Required attribute 'mid' is missing"
+                 "updateVehicle.mechanic.mid: mid must be provided "
              );
          }
 
