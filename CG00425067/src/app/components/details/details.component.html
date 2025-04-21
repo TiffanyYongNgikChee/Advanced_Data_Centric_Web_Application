@@ -6,12 +6,7 @@
       <div class="error-container">
         <p>{{ errorMessage }}</p>
       </div>
-    } <!-- Loading -->
-    @else if (isLoading) {
-      <div class="loading-indicator">
-        <span>Loading vehicle details...</span>
-      </div>
-    } @else if (vehicle) { <!-- API GET successful -->
+    } <!-- Loading --> @else if (vehicle) { <!-- API GET successful -->
       <div class="vehicle-info">
         <h3>Registration: {{vehicle.reg}}</h3>
   

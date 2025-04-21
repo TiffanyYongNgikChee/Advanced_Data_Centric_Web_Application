@@ -14,15 +14,32 @@ export class VehicleComponent {
   private garageService = inject(GarageService);
 
   public vehicles: Vehicle[] = [];
+  public isLoading: boolean = true;
+   
+   // Property to store error messages
+   public error: boolean = false;
+   public errorMessage: string = '';
  
    ngOnInit() {
      // Get vehicle details from service
-     this.garageService.getAllVehicles().subscribe((data: any) => {
-       // Assign the data to the vehicles array.
-       this.vehicles = data;
+     this.garageService.getAllVehicles().subscribe({
+      next: (data: any) => {
+        // Assign the data to the vehicles array.
+        this.vehicles = data;
+        this.error = false;
+        this.errorMessage = '';
+        this.isLoading = false;
  
        // debug
        console.log('Vehicle Details:', this.vehicles);
+       },
+       error: (error) => {
+         console.error('Error fetching vehicles:', error);
+         this.error = true;
+         this.isLoading = false;
+         this.errorMessage = 'Unable to load vehicles. Please try again later.';
+         console.log(this.error);
+       }
      });
    }
 

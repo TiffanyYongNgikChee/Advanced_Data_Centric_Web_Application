@@ -54,7 +54,7 @@ public class Mechanic {
 		this.salary = salary;
 		this.garage = garage;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	public void setId(int id) {

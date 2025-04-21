@@ -1,7 +1,23 @@
 <div class="vehicles-container">
-
   <div class="table-responsive">
-    <table class="vehicles-table">
+    
+    <!-- Error -->
+    <div class="error-container" *ngIf="error">
+      <p>{{ errorMessage }}</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-indicator" *ngIf="!error && isLoading">
+      <span>Loading vehicles...</span>
+    </div>
+
+    <!-- No Data -->
+    <div *ngIf="!error && !isLoading && vehicles.length === 0">
+      No vehicles available
+    </div>
+
+    <!-- Vehicle Table -->
+    <table class="vehicles-table" *ngIf="!error && !isLoading && vehicles.length > 0">
       <thead>
         <tr>
           <th>Reg</th>
@@ -14,9 +30,6 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="vehicles.length === 0">
-          <td colspan="7" class="no-data">No vehicles found</td>
-        </tr>
         <tr *ngFor="let vehicle of vehicles">
           <td>{{ vehicle.reg }}</td>
           <td>{{ vehicle.make }}</td>
@@ -26,7 +39,7 @@
             {{ vehicle.mechanic?.mid }}, {{ vehicle.mechanic?.name }}, {{ vehicle.mechanic?.salary }}
           </td>
           <td>
-            {{ vehicle.mechanic.garage.gid }}, {{ vehicle.mechanic.garage.location }}, {{ vehicle.mechanic.garage?.budget}}
+            {{ vehicle.mechanic?.garage?.gid }}, {{ vehicle.mechanic?.garage?.location }}, {{ vehicle.mechanic?.garage?.budget }}
           </td>
           <td>
             <button (click)="updateVehicle(vehicle.reg)" class="btn btn-primary">Update</button>
@@ -34,5 +47,6 @@
         </tr>
       </tbody>
     </table>
+
   </div>
 </div>

@@ -67,13 +67,12 @@ public class VehicleService {
         if (dto.getId() != null ) {
             throw new IllegalArgumentException("save.vehicle.id: id must not be provided");
         }
-        //if (dto.getOwner() != null ) {
-        //    throw new DisallowedFieldException("save.vehicle.owner: owner must not be provided");
-        //}
-        //if (dto.getMechanic() != null ) {
-        //    throw new DisallowedFieldException("save.vehicle.mechanic: mechanic must not be provided");
-        //}
-
+        
+        if (!dto.getDisallowedFields().isEmpty()) {
+            throw new IllegalArgumentException("save.vehicle."+ dto.getDisallowedFields() +": "+ dto.getDisallowedFields() + " must not be provided");
+        }
+        
+      
         if (vr.existsByReg(dto.getReg())) {
             throw new IllegalArgumentException("Vehicle " + dto.getReg() + " already exists");
         }
