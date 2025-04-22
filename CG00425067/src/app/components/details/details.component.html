@@ -1,72 +1,109 @@
-<div class="details-container">
+<div class="vehicle-detail-view">
 
-  <!-- Error handling -->
-  <div *ngIf="error" class="error-container">
-    <p>{{ errorMessage }}</p>
+  <!-- Error State -->
+  <div *ngIf="error" class="vehicle-detail-view__error-state">
+    <div class="error-state__container">
+      <i class="error-state__icon fas fa-exclamation-circle"></i>
+      <h3 class="error-state__title">Data Retrieval Error</h3>
+      <p class="error-state__message">{{ errorMessage }}</p>
+    </div>
   </div>
 
-  <!-- API GET successful -->
-  <div *ngIf="!error && vehicle" class="vehicle-info">
-    <h3>Registration: {{ vehicle.reg }}</h3>
+  <!-- Loading State -->
+  <div *ngIf="!vehicle && !error" class="vehicle-detail-view__loading-state">
+    <div class="loading-state__animation"></div>
+    <p class="loading-state__text">Retrieving vehicle details...</p>
+  </div>
 
-    <!-- Vehicle Edit Form -->
+  <!-- Not Found State -->
+  <div *ngIf="!vehicle && !isLoading && !error" class="vehicle-detail-view__not-found">
+    <div class="not-found__container">
+      <i class="not-found__icon fas fa-search-minus"></i>
+      <h1 class="not-found__title">Vehicle Not Found</h1>
+      <h3 class="not-found__status">Status: 404</h3>
+      <p class="not-found__message">Registration <strong>{{ reg }}</strong> doesn't exist in our records</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!error && vehicle" class="vehicle-detail-view__content">
+    
+    <!-- Vehicle Header -->
+    <header class="vehicle-header">
+      <h2 class="vehicle-header__title">
+        <span class="vehicle-header__label">Vehicle Registration:</span>
+        <span class="vehicle-header__value">{{ vehicle.reg }}</span>
+      </h2>
+    </header>
+
+    <!-- Edit Form -->
     <form [formGroup]="vehicleForm" class="vehicle-form">
-      <div>
-        <label for="reg">Registration</label>
-        <input id="reg" formControlName="reg" />
-      </div>
-
-      <div>
-        <label for="make">Make</label>
-        <input id="make" formControlName="make" />
-      </div>
-
-      <div>
-        <label for="model">Model</label>
-        <input id="model" formControlName="model" />
-      </div>
-
-      <div>
-        <label for="mechanicId">Mechanic ID</label>
-        <input id="mechanicId" formControlName="mechanicId" />
-        <div class="current-value">
-          Current input: <strong>{{ currentMechanicId }}</strong>
-          <span *ngIf="currentMechanicId !== (vehicle.mechanic?.mid || '')" class="changed-value">
-            (Changed from: {{ vehicle.mechanic?.mid }})
-          </span>
+      <div class="form-section">
+        <h3 class="form-section__title">Vehicle Information</h3>
+        
+        <div class="form-group">
+          <label for="reg" class="form-group__label">Registration Number</label>
+          <input id="reg" formControlName="reg" class="form-group__input" />
         </div>
-        <button type="button" (click)="updateMechanic()">Update</button>
+
+        <div class="form-group">
+          <label for="make" class="form-group__label">Manufacturer</label>
+          <input id="make" formControlName="make" class="form-group__input" />
+        </div>
+
+        <div class="form-group">
+          <label for="model" class="form-group__label">Model</label>
+          <input id="model" formControlName="model" class="form-group__input" />
+        </div>
       </div>
 
-      <div>
-        <label for="mechanicName">Mechanic Name</label>
-        <input id="mechanicName" formControlName="mechanicName" />
+      <div class="form-section">
+        <h3 class="form-section__title">Service Information</h3>
+        
+        <div class="form-group">
+          <label for="mechanicId" class="form-group__label">Assigned Mechanic ID</label>
+          <input id="mechanicId" formControlName="mechanicId" class="form-group__input" />
+          <div class="form-group__hint">
+            Current value: <strong class="form-group__current-value">{{ currentMechanicId }}</strong>
+            <span *ngIf="currentMechanicId !== (vehicle.mechanic?.mid || '')" class="form-group__changed-value">
+              (Previously: {{ vehicle.mechanic?.mid }})
+            </span>
+          </div>
+          <button type="button" (click)="updateMechanic()" class="form-group__action-button">
+            <i class="fas fa-user-cog"></i> Update Mechanic
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label for="mechanicName" class="form-group__label">Mechanic Name</label>
+          <input id="mechanicName" formControlName="mechanicName" class="form-group__input" />
+        </div>
+
+        <div class="form-group">
+          <label for="garageLocation" class="form-group__label">Service Location</label>
+          <input id="garageLocation" formControlName="garageLocation" class="form-group__input" />
+        </div>
       </div>
 
-      <div>
-        <label for="garageLocation">Garage Location</label>
-        <input id="garageLocation" formControlName="garageLocation" />
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="submit" class="form-actions__submit">Save Changes</button>
+        <button type="button" (click)="goBack()" class="form-actions__cancel">
+          <i class="fas fa-arrow-left"></i> Back to List
+        </button>
       </div>
     </form>
 
-    <!-- Display submission feedback -->
-    <div *ngIf="submitMessage" class="alert"
+    <!-- Submission Feedback -->
+    <div *ngIf="submitMessage" class="submission-feedback"
       [ngClass]="{
-        'alert-success': submitMessage.includes('successful'),
-        'alert-danger': submitMessage.includes('Error')
+        'submission-feedback--success': submitMessage.includes('successful'),
+        'submission-feedback--error': submitMessage.includes('Error')
       }">
+      <i class="submission-feedback__icon" 
+         [class.fa-check-circle]="submitMessage.includes('successful')"
+         [class.fa-times-circle]="submitMessage.includes('Error')"></i>
       {{ submitMessage }}
     </div>
-
-    
-  </div>
-
-  <div *ngIf="!vehicle && !isLoading && !error" class="loading">
-    <h1>Error</h1>
-    <h3>Status: 500</h3>
-    <h3>Message: {{ reg }} doesn't exist</h3>
-  </div>
-  <div>
-    <button (click)="goBack()" class="btn btn-secondary">Back</button>
   </div>
 </div>

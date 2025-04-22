@@ -1,54 +1,72 @@
-<div class="vehicles-container">
-  <div class="table-responsive">
+<div class="vehicle-management">
+  <div class="vehicle-management__content">
     
-    <!-- Error -->
-    <div class="error-container" *ngIf="error">
-      <h1>Error</h1>
-      <h3>Status: 500</h3>
-      <h3>{{ errorMessage }}</h3>
+    <!-- Error State -->
+    <div class="vehicle-management__error-state" *ngIf="error">
+      <div class="error-state__content">
+        <h1 class="error-state__title">System Error</h1>
+        <h3 class="error-state__status">Status: 500</h3>
+        <h3 class="error-state__message">{{ errorMessage }}</h3>
+      </div>
     </div>
 
-    <!-- Loading -->
-    <div class="loading-indicator" *ngIf="!error && isLoading">
-      <span>Loading vehicles...</span>
+    <!-- Loading Indicator -->
+    <div class="vehicle-management__loading-state" *ngIf="!error && isLoading">
+      <div class="loading-state__animation"></div>
+      <span class="loading-state__text">Retrieving vehicle data...</span>
     </div>
 
-    <!-- No Data -->
-    <div *ngIf="!error && !isLoading && vehicles.length === 0">
-      No vehicles available
+    <!-- Empty State -->
+    <div class="vehicle-management__empty-state" *ngIf="!error && !isLoading && vehicles.length === 0">
+      <div class="empty-state__content">
+        <i class="empty-state__icon fas fa-car"></i>
+        <h3 class="empty-state__title">No Vehicles Available</h3>
+        <p class="empty-state__description">Currently there are no vehicles registered in the system.</p>
+      </div>
     </div>
 
-    <!-- Vehicle Table -->
-    <table class="vehicles-table" *ngIf="!error && !isLoading && vehicles.length > 0">
-      <thead>
-        <tr>
-          <th>Reg</th>
-          <th>Make</th>
-          <th>Model</th>
-          <th>Owner</th>
-          <th>Mechanic</th>
-          <th>Garage Location</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let vehicle of vehicles">
-          <td>{{ vehicle.reg }}</td>
-          <td>{{ vehicle.make }}</td>
-          <td>{{ vehicle.model }}</td>
-          <td>{{ vehicle.owner?.cid }}, {{ vehicle.owner?.name }}</td>
-          <td>
-            {{ vehicle.mechanic?.mid }}, {{ vehicle.mechanic?.name }}, {{ vehicle.mechanic?.salary }}
-          </td>
-          <td>
-            {{ vehicle.mechanic?.garage?.gid }}, {{ vehicle.mechanic?.garage?.location }}, {{ vehicle.mechanic?.garage?.budget }}
-          </td>
-          <td>
-            <button (click)="updateVehicle(vehicle.reg)" class="btn btn-primary">Update</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Vehicle Data Table -->
+    <div class="vehicle-management__data-table" *ngIf="!error && !isLoading && vehicles.length > 0">
+      <table class="data-table__container">
+        <thead class="data-table__header">
+          <tr class="data-table__header-row">
+            <th class="data-table__header-cell">Registration</th>
+            <th class="data-table__header-cell">Make</th>
+            <th class="data-table__header-cell">Model</th>
+            <th class="data-table__header-cell">Owner Details</th>
+            <th class="data-table__header-cell">Assigned Mechanic</th>
+            <th class="data-table__header-cell">Garage Information</th>
+            <th class="data-table__header-cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="data-table__body">
+          <tr class="data-table__row" *ngFor="let vehicle of vehicles">
+            <td class="data-table__cell data-table__cell--reg">{{ vehicle.reg }}</td>
+            <td class="data-table__cell data-table__cell--make">{{ vehicle.make }}</td>
+            <td class="data-table__cell data-table__cell--model">{{ vehicle.model }}</td>
+            <td class="data-table__cell data-table__cell--owner">
+              <span class="owner__id">{{ vehicle.owner?.cid }}</span>
+              <span class="owner__name">{{ vehicle.owner?.name }}</span>
+            </td>
+            <td class="data-table__cell data-table__cell--mechanic">
+              <div class="mechanic__id">{{ vehicle.mechanic?.mid }}</div>
+              <div class="mechanic__name">{{ vehicle.mechanic?.name }}</div>
+              <div class="mechanic__salary">{{ vehicle.mechanic?.salary | currency }}</div>
+            </td>
+            <td class="data-table__cell data-table__cell--garage">
+              <div class="garage__id">{{ vehicle.mechanic?.garage?.gid }}</div>
+              <div class="garage__location">{{ vehicle.mechanic?.garage?.location }}</div>
+              <div class="garage__budget">{{ vehicle.mechanic?.garage?.budget | currency }}</div>
+            </td>
+            <td class="data-table__cell data-table__cell--actions">
+              <button (click)="updateVehicle(vehicle.reg)" class="action-button action-button--update">
+                <i class="fas fa-pencil-alt"></i> Edit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>
