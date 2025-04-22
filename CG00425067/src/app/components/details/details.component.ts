@@ -13,27 +13,28 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 })
 export class DetailsComponent implements OnInit{
+  // Inject dependencies
   private garageService = inject(GarageService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  public reg: string = '';
-  public isLoading: boolean = false;
+  public reg: string = ''; // Vehicle registration from route
+  public isLoading: boolean = false;  // Flag to show loading state
   
   // Store error state and message.
   public error: boolean = false;
   public errorMessage: string = '';
 
-  vehicle: Vehicle | null = null;
-  vehicleForm!: FormGroup;
-  isSubmitting = false;
-  submitMessage = '';
-  currentMechanicId: string = '';
+  vehicle: Vehicle | null = null; // Fetched vehicle object
+  vehicleForm!: FormGroup; // Form group for UI binding
+  isSubmitting = false; // Flag to indicate submission
+  submitMessage = ''; // Success/error message after submitting
+  currentMechanicId: string = ''; // ID of the mechanic being assigned
 
    ngOnInit() {
     // Initialize form
     this.initForm();
-     // Get the registration parameter from the route
+     // Fetch vehicle registration from route and retrieve details
      this.route.paramMap.subscribe(params => {
       const reg = params.get('reg');
       if (reg) {
@@ -51,6 +52,7 @@ export class DetailsComponent implements OnInit{
              // Initialize the current mechanic ID
              this.currentMechanicId = data.mechanic.mid;
           },
+          // Redirect based on error type
           error => {
             this.isLoading = false;
             console.error('Error fetching vehicle details:', error);
@@ -81,7 +83,7 @@ export class DetailsComponent implements OnInit{
       }
      });
    }
-
+   // Initialize the form structure and validation
    initForm() {
     this.vehicleForm = this.fb.group({
       reg: [{value: '', disabled: true}],
@@ -92,12 +94,12 @@ export class DetailsComponent implements OnInit{
       garageLocation: [{value: '', disabled: true}],
     });
     
-    // Subscribe to changes in the mechanicId field
+    // Keep track of mechanic ID entered by the user
     this.vehicleForm.get('mechanicId')?.valueChanges.subscribe(value => {
       this.currentMechanicId = value;
     });
   }
-
+  // Populate form with vehicle data
   populateForm(vehicle: Vehicle) {
     this.vehicleForm.patchValue({
       reg: vehicle.reg,
@@ -109,9 +111,10 @@ export class DetailsComponent implements OnInit{
     });
   }
 
+  // Called when user submits updated mechanic ID
   updateMechanic() {
-    // Use the currentMechanicId directly
     console.log('Current Mechanic ID:', this.currentMechanicId);
+    // Validate mechanic ID and vehicle exist
     if (!this.currentMechanicId || !this.vehicle) {
       this.submitMessage = 'Error: Mechanic ID and vehicle registration are required';
       return;
@@ -136,7 +139,7 @@ export class DetailsComponent implements OnInit{
         error => {
           this.isSubmitting = false;
           console.error('Error updating vehicle:', error);
-
+          // Redirect to error page with specific messages
           if (error.status === 404 || error.status === 400) {
             this.router.navigate(['/error'], {
               queryParams: {
@@ -159,7 +162,7 @@ export class DetailsComponent implements OnInit{
         }
       );
   }
-
+   // Navigate back to vehicles list
    goBack() {
     this.router.navigate(['/vehicles']);
   }
