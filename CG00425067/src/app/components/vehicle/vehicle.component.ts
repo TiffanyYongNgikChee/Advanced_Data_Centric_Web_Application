@@ -37,7 +37,7 @@ export class VehicleComponent {
          console.error('Error fetching vehicles:', error);
          this.error = true;
          this.isLoading = false;
-         this.errorMessage = 'Unable to load vehicles. Please try again later.';
+         this.errorMessage = 'Message: Http failure response for http://localhost:4200/api/vehicle : 500 Internal Server Error';
          console.log(this.error);
        }
      });

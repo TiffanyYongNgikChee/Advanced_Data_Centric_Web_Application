@@ -52,10 +52,30 @@ export class DetailsComponent implements OnInit{
              this.currentMechanicId = data.mechanic.mid;
           },
           error => {
+            this.isLoading = false;
             console.error('Error fetching vehicle details:', error);
-            this.isLoading = false; // Also stop loading on error
-            this.error = true;
-            this.errorMessage = 'Failed to load vehicle data.';
+
+            if (error.status === 404) {
+              this.router.navigate(['/error'], {
+                queryParams: {
+                  message: `Vehicle with registration "${this.reg}" was not found. It may have been deleted.`
+                }
+              });
+            } else if (error.status === 0) {
+              this.router.navigate(['/error'], {
+                queryParams: {
+                  message: 'Server is unreachable. Please try again later.'
+                }
+              });
+            } else {
+              // Dynamic error message for server-side/internal errors (like 500)
+              const apiUrl = `http://localhost:4200/api/vehicle/${this.reg}`;
+              this.router.navigate(['/error'], {
+                queryParams: {
+                  message: `Status: ${error.status}\nMessage: Http failure response for ${apiUrl}: ${error.status} ${error.statusText || 'Internal Server Error'}`
+                }
+              });
+            }
           }
         );
       }
@@ -115,8 +135,27 @@ export class DetailsComponent implements OnInit{
         },
         error => {
           this.isSubmitting = false;
-          this.submitMessage = 'Error updating vehicle mechanic';
           console.error('Error updating vehicle:', error);
+
+          if (error.status === 404 || error.status === 400) {
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: `Mechanic with ID "${this.currentMechanicId}" does not exist.`
+              }
+            });
+          } else if (error.status === 0) {
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: 'Server connection lost. Please try again later.'
+              }
+            });
+          } else {
+            this.router.navigate(['/error'], {
+              queryParams: {
+                message: `Status: 500 Message: Mechanic ${this.currentMechanicId} doesn't exist`
+              }
+            });
+          }
         }
       );
   }
