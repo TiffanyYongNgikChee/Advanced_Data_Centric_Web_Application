@@ -8,10 +8,10 @@
           id="reg" 
           type="text" 
           formControlName="reg" 
-          placeholder="Enter registration number (1-8 alphanumeric characters)"
+          placeholder="Enter registration number"
         >
         <div *ngIf="vehicleForm.get('reg')?.invalid && vehicleForm.get('reg')?.touched" class="validation-error">
-          Registration number is required and must be 1-8 alphanumeric characters.
+          Registration number is required
         </div>
       </div>
       
