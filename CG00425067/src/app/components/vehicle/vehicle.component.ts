@@ -56,6 +56,7 @@ export class VehicleComponent {
    }
    // Method to navigate to vehicle creation page
     createNewVehicle() {
-      window.location.href = '/create-vehicle';
+      console.log('Navigating to create-vehicle');
+      window.location.href = '/create';
     }
 }

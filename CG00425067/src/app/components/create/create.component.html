@@ -1,1 +1,59 @@
-<p>create works!</p>
+<div class="container">
+    <h2>Create New Vehicle</h2>
+    
+    <form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="vehicle-form">
+      <div class="form-group">
+        <label for="reg">Registration Number*</label>
+        <input 
+          id="reg" 
+          type="text" 
+          formControlName="reg" 
+          placeholder="Enter registration number (1-8 alphanumeric characters)"
+        >
+        <div *ngIf="vehicleForm.get('reg')?.invalid && vehicleForm.get('reg')?.touched" class="validation-error">
+          Registration number is required and must be 1-8 alphanumeric characters.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="make">Make*</label>
+        <input 
+          id="make" 
+          type="text" 
+          formControlName="make" 
+          placeholder="Enter vehicle make"
+        >
+        <div *ngIf="vehicleForm.get('make')?.invalid && vehicleForm.get('make')?.touched" class="validation-error">
+          Make is required.
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="model">Model*</label>
+        <input 
+          id="model" 
+          type="text" 
+          formControlName="model" 
+          placeholder="Enter vehicle model"
+        >
+        <div *ngIf="vehicleForm.get('model')?.invalid && vehicleForm.get('model')?.touched" class="validation-error">
+          Model is required.
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="goBack()">Cancel</button>
+        <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Creating...' : 'Create Vehicle' }}
+        </button>
+      </div>
+    </form>
+    
+    <div *ngIf="submitError" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="submitSuccess" class="success-message">
+      Vehicle created successfully! Redirecting to vehicle list...
+    </div>
+  </div>

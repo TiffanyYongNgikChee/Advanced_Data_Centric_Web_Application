@@ -15,8 +15,8 @@ const GARAGE_API_BASE = environment.garage_api_base;
 export class GarageService {
   // inject HttpClient
   private httpClient = inject(HttpClient);
-
-  constructor() { }
+  private baseUrl = 'http://localhost:8080/api';  
+  constructor(private http: HttpClient) { }
 
   // Returns all vehicles
   getAllVehicles(): Observable<Vehicle[]> {
@@ -59,5 +59,10 @@ export class GarageService {
     // console.log('Making API PUT request to:', url, 'with body:', body);
 
     return this.httpClient.put<any>(url, body);
+  }
+
+  // Create new vehicle
+  createVehicle(vehicleData: any): Observable<Vehicle> {
+    return this.http.post<Vehicle>(`${GARAGE_API_BASE}/vehicle`, vehicleData);
   }
 }
