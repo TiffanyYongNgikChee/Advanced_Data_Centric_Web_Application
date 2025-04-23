@@ -1,6 +1,9 @@
 package com.example.demo.repositories;
 
-
+/*
+ * Handles all CRUD operations and queries for Mechanic entities. It extends JpaRepository, so you automatically get:
+ * save(), delete(), findById(), etc.
+ * Plus, you define some custom queries using method names and @EntityGraph for performance.*/
 import java.util.List;
 import java.util.Optional;
 

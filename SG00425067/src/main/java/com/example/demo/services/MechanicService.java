@@ -14,10 +14,12 @@ import com.example.demo.repositories.VehicleRepository;
 
 import jakarta.transaction.Transactional;
 
+// Provides a dedicated service for operations related to mechanics, acting as the middle layer between your controllers (API) and repositories (DB access).
 @Service
 @Transactional
 public class MechanicService {
-
+	
+	//Injects the MechanicRepository and VehicleRepository to access mechanics and check if any vehicles are tied to them
     @Autowired
     private MechanicRepository mr;
     

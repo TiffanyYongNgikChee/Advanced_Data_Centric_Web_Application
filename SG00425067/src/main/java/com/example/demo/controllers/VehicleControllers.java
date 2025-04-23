@@ -36,35 +36,37 @@ import com.example.demo.views.VehicleViews;
 import com.example.demo.validations.VehiclePValidation;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
-
+/*
+ * This is the REST controller for handling HTTP requests related to vehicles.
+ * It maps requests to the /api/vehicle route and delegates logic to the
+ *  VehicleService layer.*/
 @RestController
-@RequestMapping("/api/vehicle") // API endpoint.
+@RequestMapping("/api/vehicle") // Base route for all vehicle-related endpoints
 public class VehicleControllers {
 	 @Autowired
-     VehicleService vs;
+     VehicleService vs; // Injecting the VehicleService to delegate business logic
 	 
      @GetMapping("/all")
      @JsonView(VehicleViews.Public.class)
      public Iterable<Vehicle> getAllVehicles() {
-         return vs.getAllVehicles();
+         return vs.getAllVehicles(); // Get all vehicles from the service
      }
      
-     @GetMapping // GET "/api/vehicle?make=<carMake>"
+     @GetMapping // Endpoint: /api/vehicle?make=Toyota
      @JsonView(VehicleViews.Public.class)
      public List<Vehicle> getVehiclesByMake(@RequestParam String make) {
-         return vs.getVehiclesByMake(make);
+         return vs.getVehiclesByMake(make); // Get vehicles filtered by make
      }
 	 
-	 @GetMapping("/one") // GET "/api/vehicle/one?reg=<carReg>"
+	 @GetMapping("/one") // Endpoint: /api/vehicle/one?reg=ABC123
 	 @JsonView(VehicleViews.ExtendedPublic.class)
 	 public Optional<Vehicle> getVehicleByReg(@RequestParam String reg) {
-	    return vs.getVehicleByReg(reg); // Call service to return JSON vehicle object.
+	    return vs.getVehicleByReg(reg); // Find vehicle by registration number
 	  }
 
      @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8"}) // POST "/api/vehicle"
      public ResponseEntity<?> addVehicle(@Valid @RequestBody VehicleData dto, BindingResult result) throws VehicleException { // Get vehicle from request body.
-     	// Validation happens automatically here.
-     	
+    	// Validate input and return field-specific error messages
      	if (result.hasErrors()) {
      		// Return first error message caught during validation.
      		String errorMessage = result.getFieldErrors().stream()
@@ -73,8 +75,8 @@ public class VehicleControllers {
      	        return ResponseEntity.badRequest().body(errorMessage);
      	}
          
-     	// Create vehicle
-         Vehicle vehicle = vs.createVehicleFromDTO(dto);
+     	// Create and return the new vehicle object
+        Vehicle vehicle = vs.createVehicleFromDTO(dto);
              
          // Return 400 OK -> vehicle saved to database.
          return ResponseEntity.ok(vehicle);
@@ -87,7 +89,7 @@ public class VehicleControllers {
          @RequestBody Map<String, Object> requestBody) {  // Use Map to inspect raw JSON.
          
     	 
-         // Check for disallowed attributes
+    	 // Prevent updating restricted fields
          Set<String> disallowed = Set.of("id", "name", "salary", "garage", "vehicles");
          for (String key : requestBody.keySet()) {
              if (disallowed.contains(key)) {
@@ -98,14 +100,15 @@ public class VehicleControllers {
              }
          }
 
-         // Validate required mid field.
+         // Check for the presence of required 'mid' (mechanic ID)
          if (!requestBody.containsKey("mid")) {
              throw new ResponseStatusException(
                  HttpStatus.BAD_REQUEST,
                  "updateVehicle.mechanic.mid: mid must be provided "
              );
          }
-
+         
+         // Try to update the mechanic assigned to the vehicle
          try {
          	// Get mid from JSON, and try to update vehicle mid.
              String mid = requestBody.get("mid").toString();

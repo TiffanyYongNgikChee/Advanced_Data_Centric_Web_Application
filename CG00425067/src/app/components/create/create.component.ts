@@ -57,7 +57,7 @@ onSubmit() {
         
         // Redirect to vehicle list after 2 seconds
         setTimeout(() => {
-          window.location.href = '/vehicle';
+          window.location.href = '/vehicles';
         }, 2000);
       },
       error: (error) => {
@@ -77,6 +77,6 @@ onSubmit() {
 
 // Navigation back to vehicle list
 goBack() {
-  window.location.href = '/vehicle';
+  window.location.href = '/vehicles';
 }
 }
