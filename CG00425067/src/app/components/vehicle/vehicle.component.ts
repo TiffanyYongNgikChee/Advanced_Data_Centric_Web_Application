@@ -54,4 +54,8 @@ export class VehicleComponent {
    updateVehicle(reg: String) {
       window.location.href = `/vehicleDetails/${reg}`;
    }
+   // Method to navigate to vehicle creation page
+    createNewVehicle() {
+      window.location.href = '/create-vehicle';
+    }
 }
